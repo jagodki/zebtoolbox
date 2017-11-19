@@ -44,7 +44,3 @@ class ImportController:
                                  QgsField("z", QVariant.Double),
                                  QgsField("pictures", QVariant.String)])
         layer.commitChanges()
-
-
-ic = ImportController()
-ic.importZebFile()

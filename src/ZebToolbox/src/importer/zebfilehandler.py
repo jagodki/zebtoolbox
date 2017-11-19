@@ -1,17 +1,15 @@
 from xml.sax import handler
-import georohdata as gd
-import rasterrohdata as rd
+from qgis.core import QgsFeature, QgsGeometry, QgsPoint
 
 class ZebFileHandler(handler.ContentHandler):
 
     def __init__(self):
-        self.fileType = " "
-        self.georohData = gd.GeorohData()
-        self.rasterrohData = rd.RasterrohData()
-        self.currentPictures = []
+        self.fileType = ""
+        self.currentPictures = ""
         self.currentLfdm = ""
         self.currentContent = ""
         self.pointLayer = ""
+        self.currentPosition = ""
 
     def startElement(self, name, attrs):
         if name == "":
@@ -21,10 +19,6 @@ class ZebFileHandler(handler.ContentHandler):
         elif name == "Datenstrom":
             if "Lfdm" in attrs:
                 self.currentLfdm = attrs["Lfdm"]
-                if self.fileType == "geo":
-                    self.georohData.addLfdm(self.currentLfdm)
-                elif self.fileType == "raster":
-                    self.rasterrohData.addLfdm(self.currentLfdm)
         elif name == "WGS":
             x = ""
             y = ""
@@ -37,10 +31,7 @@ class ZebFileHandler(handler.ContentHandler):
             if "H_WGS" in attrs:
                 z = attrs["H_WGS"]
 
-            if self.fileType == "geo" and self.currentLfdm != "":
-                self.georohData.setCoordinates(self.currentLfdm, x + " " + y + " " + z)
-            elif self.fileType == "raster" and self.currentLfdm != "":
-                self.rasterrohData.setCoordinates(self.currentLfdm, x + " " + y + " " + z)
+            self.currentPosition = x + " " + y + " " + z
         #elif name == "B":
 
     def characters(self, content):
@@ -48,27 +39,45 @@ class ZebFileHandler(handler.ContentHandler):
 
     def endElement(self, name):
         if name == "B":
-            self.currentPictures.append(self.currentContent)
+            if self.currentPictures == "":
+                self.currentPictures = self.currentContent
+            else:
+                self.currentPictures += ";" + self.currentContent
             self.currentContent = ""
 
         elif name == "Datenstrom":
-            if self.fileType == "geo" and self.currentLfdm != "":
-                self.georohData.setPicture(self.currentLfdm, self.currentPictures)
-            elif self.fileType == "raster" and self.currentLfdm != "":
-                self.rasterrohData.setCoordinates(self.currentLfdm, self.currentPictures)
+            self.addFeature(self.currentPosition.split(" ")[0],
+                            self.currentPosition.split(" ")[1],
+                            self.currentPosition.split(" ")[2],
+                            self.currentLfdm,
+                            self.currentPictures)
 
             self.currentLfdm = ""
             self.currentContent = ""
-            self.currentPictures = []
+            self.currentPictures = ""
 
     def getFileType(self):
         return self.fileType
 
-    def getGeorohData(self):
-        return self.georohData
-
-    def getRasterrohData(self):
-        return self.rasterrohData
-
     def setPointLayer(self, pointLayer):
         self.pointLayer = pointLayer
+
+    def addFeature(self, x, y, z, lfdm, pictures):
+        #init the new feature
+        feat = QgsFeature(self.pointLayer.pendingFields())
+        feat.initAttributes(5)
+
+        #insert the attributes of the new feature
+        feat.setAttributes(["x", x])
+        feat.setAttributes(["y", y])
+        feat.setAttributes(["z", z])
+        feat.setAttributes(["lfdm", lfdm])
+        feat.setAttributes(["pictures", pictures])
+
+        #create the geometry of the new feature
+        feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(x, y)))
+
+        #add the feature to the layer
+        self.pointLayer.startEditing()
+        self.pointLayer.addFeature(feat, True)
+        self.pointLayer.commitChanges()
