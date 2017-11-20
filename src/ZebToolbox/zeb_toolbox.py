@@ -20,13 +20,14 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon
+from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt5.QtGui import QAction, QIcon, QFileDialog
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialog
 from zeb_toolbox_dialog import ZebToolboxDialog
 import os.path
+import src.importer.importcontroller as ic
 
 
 class ZebToolbox:
@@ -65,6 +66,8 @@ class ZebToolbox:
         # TODO: We are going to let the user set this up in a future iteration
         self.toolbar = self.iface.addToolBar(u'ZebToolbox')
         self.toolbar.setObjectName(u'ZebToolbox')
+        self.dlg.lineEditSelectZebFile.clear()
+        self.dlg.pushButtonSelectZebFile.clicked.connect(self.selectZebFileFromFileDialog)
 
     # noinspection PyMethodMayBeStatic
     def tr(self, message):
@@ -188,6 +191,11 @@ class ZebToolbox:
         result = self.dlg.exec_()
         # See if OK was pressed
         if result:
-            # Do something useful here - delete the line containing pass and
-            # substitute with your code.
-            pass
+            zebFilePath = self.dlg.lineEditSelectZebFile.text()
+            importController = ic.ImportController()
+            importController.importZebFile(zebFilePath)
+
+
+    def selectZebFileFromFileDialog(self):
+        filename = QFileDialog.getSaveFileName(self.dlg, "Select ZEB file ", "", '*.xml')
+        self.dlg.lineEditSelectZebFile.setText(filename)

@@ -7,12 +7,11 @@ from PyQt4.QtCore import QVariant
 class ImportController:
 
     def __init__(self):
-        self.path = ""
         self.zebFileHandler = zfh.ZebFileHandler()
 
-    def importZebFile(self):
+    def importZebFile(self,path):
         #get the filename
-        filename = os.path.splitext(self.path)[0]
+        filename = os.path.splitext(path)[0]
 
         #create a new point- and line-layer
         lineLayer = QgsVectorLayer("LineString", filename + "_trajetory", "memory")
@@ -27,8 +26,7 @@ class ImportController:
         #parse the XML-file
         parser = make_parser()
         parser.setContentHandler(self.zebFileHandler)
-        parser.parse(self.path)
-        print(self.zebFileHandler.getGeorohData())
+        parser.parse(path)
         print("Fertig")
 
         #show both layers in QGIS
