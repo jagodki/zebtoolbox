@@ -75,7 +75,7 @@ class ZebFileHandler(handler.ContentHandler):
         feat.setAttributes(["pictures", pictures])
 
         #create the geometry of the new feature
-        feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(x, y)))
+        feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(float(x), float(y))))
 
         #add the feature to the layer
         self.pointLayer.startEditing()

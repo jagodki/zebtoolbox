@@ -20,8 +20,8 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt5.QtGui import QAction, QIcon, QFileDialog
+from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt4.QtGui import QAction, QIcon, QFileDialog
 # Initialize Qt resources from file resources.py
 import resources
 # Import the code for the dialog
@@ -59,6 +59,8 @@ class ZebToolbox:
             if qVersion() > '4.3.3':
                 QCoreApplication.installTranslator(self.translator)
 
+        # Create the dialog (after translation) and keep reference
+        self.dlg = ZebToolboxDialog()
 
         # Declare instance attributes
         self.actions = []
@@ -135,9 +137,6 @@ class ZebToolbox:
         :rtype: QAction
         """
 
-        # Create the dialog (after translation) and keep reference
-        self.dlg = ZebToolboxDialog()
-
         icon = QIcon(icon_path)
         action = QAction(icon, text, parent)
         action.triggered.connect(callback)
@@ -197,5 +196,5 @@ class ZebToolbox:
 
 
     def selectZebFileFromFileDialog(self):
-        filename = QFileDialog.getSaveFileName(self.dlg, "Select ZEB file ", "", '*.xml')
+        filename = QFileDialog.getOpenFileName(self.dlg, "Select ZEB file ", "", '*.xml')
         self.dlg.lineEditSelectZebFile.setText(filename)

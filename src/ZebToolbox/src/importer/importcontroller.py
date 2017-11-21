@@ -11,7 +11,7 @@ class ImportController:
 
     def importZebFile(self,path):
         #get the filename
-        filename = os.path.splitext(path)[0]
+        filename = os.path.basename(path).split(".")[0]
 
         #create a new point- and line-layer
         lineLayer = QgsVectorLayer("LineString", filename + "_trajetory", "memory")
@@ -35,8 +35,8 @@ class ImportController:
 
     def createAttributeTable(self, layer):
         layer.startEditing()
-        layerData = self.lineLayer.dataProvider()
-        layerData.addAttributes([QgsField("lfdm", QVariant.Integer),
+        layerData = layer.dataProvider()
+        layerData.addAttributes([QgsField("lfdm", QVariant.Int),
                                  QgsField("x", QVariant.Double),
                                  QgsField("y", QVariant.Double),
                                  QgsField("z", QVariant.Double),
