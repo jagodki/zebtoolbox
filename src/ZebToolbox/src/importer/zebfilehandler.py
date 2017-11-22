@@ -12,10 +12,12 @@ class ZebFileHandler(handler.ContentHandler):
         self.currentPosition = ""
 
     def startElement(self, name, attrs):
-        if name == "":
-            self.fileType = "geo"
-        elif name == "":
-            self.fileType = "raster"
+        if "Rohdaten" in name:
+            if "Typ" in attrs:
+                if "Geoorientiert" in attrs["Typ"]:
+                    self.fileType = "geo"
+                elif "Rasterorientiert" in attrs["Typ"]:
+                    self.fileType = "raster"
         #elif name == "Datenstrom":
 
         elif name == "WGS":
@@ -67,15 +69,14 @@ class ZebFileHandler(handler.ContentHandler):
         feat = QgsFeature(self.pointLayer.pendingFields())
 
         #insert the attributes of the new feature
-        feat.setAttributes(["x", float(x)])
-        feat.setAttributes(["y", float(y)])
-        feat.setAttributes(["z", float(z)])
-        feat.setAttributes(["lfdm", int(lfdm)])
-        feat.setAttributes(["pictures", str(pictures)])
+        feat.setAttribute("x", float(x))
+        feat.setAttribute("y", float(y))
+        feat.setAttribute("z", float(z))
+        feat.setAttribute("lfdm", int(lfdm))
+        feat.setAttribute("pictures", str(pictures))
 
         #create the geometry of the new feature
         feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(float(x), float(y))))
 
         #add the feature to the layer
-        print("F:", feat.id(), feat.attributes(), feat.geometry().asPoint())
         self.pointLayer.addFeatures([feat])

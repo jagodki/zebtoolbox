@@ -36,10 +36,6 @@ class ImportController:
         parser.setContentHandler(self.zebFileHandler)
         parser.parse(path)
 
-
-        feat = QgsFeature(pointLayer.pendingFields())
-        feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(10.0, 10.0)))
-
         #commit editing on layer
         pointLayer.commitChanges()
 
@@ -49,7 +45,6 @@ class ImportController:
         print("Fertig")
 
     def createAttributeTable(self, layer):
-        #layer.startEditing()
         layerData = layer.dataProvider()
         layerData.addAttributes([QgsField("lfdm", QVariant.Int),
                                  QgsField("x", QVariant.Double),
@@ -57,4 +52,3 @@ class ImportController:
                                  QgsField("z", QVariant.Double),
                                  QgsField("pictures", QVariant.String)])
         layer.updateFields()
-        #layer.commitChanges()
