@@ -9,7 +9,7 @@
 [general]
 name=ZEB Toolbox
 qgisMinimumVersion=2.0
-description=toolbox for data of survey and evaluation of road conditions in Germany (ZEB)
+description=toolbox for data of the procedure for the road monitoring and assessment (ZEB)
 version=0.1
 author=https://github.com/jagodki
 email=https://github.com/jagodki/zebtoolbox
