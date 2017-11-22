@@ -16,9 +16,8 @@ class ZebFileHandler(handler.ContentHandler):
             self.fileType = "geo"
         elif name == "":
             self.fileType = "raster"
-        elif name == "Datenstrom":
-            if "Lfdm" in attrs:
-                self.currentLfdm = attrs["Lfdm"]
+        #elif name == "Datenstrom":
+
         elif name == "WGS":
             x = ""
             y = ""
@@ -32,25 +31,26 @@ class ZebFileHandler(handler.ContentHandler):
                 z = attrs["H_WGS"]
 
             self.currentPosition = x + " " + y + " " + z
-        #elif name == "B":
+
+            if "LfdM" in attrs:
+                self.currentLfdm = attrs["LfdM"]
+        elif name == "B":
+            if "D" in attrs:
+                if self.currentPictures == "":
+                    self.currentPictures = attrs["D"]
+                else:
+                    self.currentPictures += ";" + attrs["D"]
 
     def characters(self, content):
         self.currentContent += content.strip()
 
     def endElement(self, name):
-        if name == "B":
-            if self.currentPictures == "":
-                self.currentPictures = self.currentContent
-            else:
-                self.currentPictures += ";" + self.currentContent
-            self.currentContent = ""
-
-        elif name == "Datenstrom":
-            self.addFeature(self.currentPosition.split(" ")[0],
-                            self.currentPosition.split(" ")[1],
-                            self.currentPosition.split(" ")[2],
-                            self.currentLfdm,
-                            self.currentPictures)
+        if name == "Datenstrom":
+            self.insertFeature(self.currentPosition.split(" ")[0],
+                               self.currentPosition.split(" ")[1],
+                               self.currentPosition.split(" ")[2],
+                               self.currentLfdm,
+                               self.currentPictures)
 
             self.currentLfdm = ""
             self.currentContent = ""
@@ -62,22 +62,20 @@ class ZebFileHandler(handler.ContentHandler):
     def setPointLayer(self, pointLayer):
         self.pointLayer = pointLayer
 
-    def addFeature(self, x, y, z, lfdm, pictures):
+    def insertFeature(self, x, y, z, lfdm, pictures):
         #init the new feature
         feat = QgsFeature(self.pointLayer.pendingFields())
-        feat.initAttributes(5)
 
         #insert the attributes of the new feature
-        feat.setAttributes(["x", x])
-        feat.setAttributes(["y", y])
-        feat.setAttributes(["z", z])
-        feat.setAttributes(["lfdm", lfdm])
-        feat.setAttributes(["pictures", pictures])
+        feat.setAttributes(["x", float(x)])
+        feat.setAttributes(["y", float(y)])
+        feat.setAttributes(["z", float(z)])
+        feat.setAttributes(["lfdm", int(lfdm)])
+        feat.setAttributes(["pictures", str(pictures)])
 
         #create the geometry of the new feature
         feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(float(x), float(y))))
 
         #add the feature to the layer
-        self.pointLayer.startEditing()
-        self.pointLayer.addFeature(feat, True)
-        self.pointLayer.commitChanges()
+        print("F:", feat.id(), feat.attributes(), feat.geometry().asPoint())
+        self.pointLayer.addFeatures([feat])
