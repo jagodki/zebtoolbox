@@ -15,15 +15,16 @@ class ImportController:
         filename = os.path.basename(path).split(".")[0]
 
         #create a new point- and line-layer
-        lineLayer = QgsVectorLayer("LineString", filename + "_trajetory", "memory")
+        lineLayer = QgsVectorLayer("LineString", filename + "_trajectory", "memory")
         pointLayer = QgsVectorLayer("Point", filename + "_positions", "memory")
 
         #show both layers in QGIS
         QgsMapLayerRegistry.instance().addMapLayer(lineLayer)
         QgsMapLayerRegistry.instance().addMapLayer(pointLayer)
 
-        #start editing of the layer
+        #start editing of the layers
         pointLayer.startEditing()
+        lineLayer.startEditing()
 
         #create the attribute table for the point layer (line layer has no attributes, just one geometry)
         self.createAttributeTable(pointLayer)
@@ -36,8 +37,16 @@ class ImportController:
         parser.setContentHandler(self.zebFileHandler)
         parser.parse(path)
 
+        #create a trajectory with the coordinates of the point layer as vertices
+        self.createTrajectoryFromPointLayer(pointLayer, lineLayer)
+
         #commit editing on layer
         pointLayer.commitChanges()
+        lineLayer.commitChanges()
+
+        #deselect all features from the new layers
+        self.deselectFeatures(pointLayer)
+        self.deselectFeatures(lineLayer)
 
         #update layer's extent
         pointLayer.updateExtents()
@@ -52,3 +61,22 @@ class ImportController:
                                  QgsField("z", QVariant.Double),
                                  QgsField("pictures", QVariant.String)])
         layer.updateFields()
+
+    def createTrajectoryFromPointLayer(self, pointLayer, lineLayer):
+        vertices = []
+        pointFeatures = pointLayer.getFeatures()
+
+        #extract all point coordinates from the point layer and inserts them into the list of vertices
+        for pf in pointFeatures:
+            vertices.append(pf.geometry().asPoint())
+
+        feature = QgsFeature()
+        feature.setGeometry(QgsGeometry.fromPolyline(vertices))
+        print(vertices)
+        print("---")
+        print([QgsPoint(1, 1), QgsPoint(10, 10)])
+        #feature.setGeometry(QgsGeometry.fromPolyline([QgsPoint(1, 1), QgsPoint(10, 10)]))
+        lineLayer.addFeatures([feature])
+
+    def deselectFeatures(self, layer):
+        layer.setSelectedFeatures([])
