@@ -3,7 +3,7 @@
 /***************************************************************************
  ZebToolboxDialog
                                  A QGIS plugin
- toolbox for data of survey and evaluation of road conditions in Germany (ZEB)
+ toolbox for data of road monitoring and assessment in Germany (ZEB)
                              -------------------
         begin                : 2017-11-17
         git sha              : $Format:%H$
