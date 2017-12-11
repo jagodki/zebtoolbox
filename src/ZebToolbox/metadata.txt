@@ -14,7 +14,10 @@ version=0.1
 author=https://github.com/jagodki
 email=https://github.com/jagodki/zebtoolbox
 
-about=test
+about=The data of road monitoring and assessment in Germany are stored in a specific XML-schema, which cannot be read by different GI-systems. This plugin enables QGIS to extract the spatial information from the XML-files called Georohdaten and Rasterrohdaten and display them as temporary layers (directly in memory).
+
+changelog=
+    0.1.0 import of one single ZEB-file realised
 
 tracker=https://github.com/jagodki/zebtoolbox/issues
 repository=https://github.com/jagodki/zebtoolbox
