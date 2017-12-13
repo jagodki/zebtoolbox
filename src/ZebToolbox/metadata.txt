@@ -10,7 +10,7 @@
 name=ZEB Toolbox
 qgisMinimumVersion=2.0
 description=toolbox for data of road monitoring and assessment in Germany (ZEB)
-version=0.1.1
+version=0.1.2
 author=jagodki
 email=jagodki.cj@gmail.com
 
@@ -19,6 +19,7 @@ about=The data of road monitoring and assessment in Germany are stored in a spec
 changelog=
     0.1.0 import of one single ZEB-file realised
     0.1.1 remove error while installing plugin in QGIS
+    0.1.2 remove ZIP from plugin
 
 tracker=https://github.com/jagodki/zebtoolbox/issues
 repository=https://github.com/jagodki/zebtoolbox
