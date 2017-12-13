@@ -10,14 +10,15 @@
 name=ZEB Toolbox
 qgisMinimumVersion=2.0
 description=toolbox for data of road monitoring and assessment in Germany (ZEB)
-version=0.1
-author=https://github.com/jagodki
-email=https://github.com/jagodki/zebtoolbox
+version=0.1.1
+author=jagodki
+email=jagodki.cj@gmail.com
 
 about=The data of road monitoring and assessment in Germany are stored in a specific XML-schema, which cannot be read by different GI-systems. This plugin enables QGIS to extract the spatial information from the XML-files called Georohdaten and Rasterrohdaten and display them as temporary layers (directly in memory).
 
 changelog=
     0.1.0 import of one single ZEB-file realised
+    0.1.1 remove error while installing plugin in QGIS
 
 tracker=https://github.com/jagodki/zebtoolbox/issues
 repository=https://github.com/jagodki/zebtoolbox
