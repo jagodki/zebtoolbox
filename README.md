@@ -5,7 +5,10 @@ A <a href="https://github.com/qgis/QGIS">QGIS</a>-plugin as a toolbox for data o
 The data of road monitoring and assessment in Germany are stored in a specific XML-schema, which cannot be read by different GI-systems. This plugin enables QGIS to extract the spatial information from the XML-files called <i>Georohdaten</i> and <i>Rasterrohdaten</i> and display them as temporary layers (directly in memory).
 
 ## Change log
-0.1 import of one single ZEB-file realised
+0.1.0 import of one single ZEB-file realised
+0.1.1 remove error while installing plugin in QGIS
+0.1.2 remove ZIP from plugin
+0.2.0 add new plugin icon
 
 ## Preliminary remarks
 The plugin runs in QGIS 2 and uses PyQt4 and Python 3.
