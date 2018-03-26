@@ -72,9 +72,9 @@ class ImportController:
 
         feature = QgsFeature()
         feature.setGeometry(QgsGeometry.fromPolyline(vertices))
-        print(vertices)
-        print("---")
-        print([QgsPoint(1, 1), QgsPoint(10, 10)])
+        #print(vertices)
+        #print("---")
+        #print([QgsPoint(1, 1), QgsPoint(10, 10)])
         #feature.setGeometry(QgsGeometry.fromPolyline([QgsPoint(1, 1), QgsPoint(10, 10)]))
         lineLayer.addFeatures([feature])
 
