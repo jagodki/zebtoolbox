@@ -1,14 +1,15 @@
 from xml.sax import make_parser
-import zebfilehandler as zfh
+from .zebfilehandler import ZebFileHandler
 import os
-from qgis.core import QgsVectorLayer, QgsField, QgsMapLayerRegistry
-from PyQt4.QtCore import QVariant
-from qgis.core import QgsFeature, QgsGeometry, QgsPoint
+#from qgis.core import QgsVectorLayer, QgsField, QgsMapLayerRegistry
+from qgis.core import *
+from PyQt5.QtCore import QVariant
+#from qgis.core import QgsFeature, QgsGeometry, QgsPoint
 
 class ImportController:
 
     def __init__(self):
-        self.zebFileHandler = zfh.ZebFileHandler()
+        self.zebFileHandler = ZebFileHandler()
 
     def importZebFile(self,path):
         #get the filename
@@ -19,8 +20,8 @@ class ImportController:
         pointLayer = QgsVectorLayer("Point", filename + "_positions", "memory")
 
         #show both layers in QGIS
-        QgsMapLayerRegistry.instance().addMapLayer(lineLayer)
-        QgsMapLayerRegistry.instance().addMapLayer(pointLayer)
+        QgsProject.instance().addMapLayer(lineLayer)
+        QgsProject.instance().addMapLayer(pointLayer)
 
         #start editing of the layers
         pointLayer.startEditing()
@@ -51,8 +52,6 @@ class ImportController:
         #update layer's extent
         pointLayer.updateExtents()
 
-        print("Fertig")
-
     def createAttributeTable(self, layer):
         layerData = layer.dataProvider()
         layerData.addAttributes([QgsField("lfdm", QVariant.Int),
@@ -71,12 +70,8 @@ class ImportController:
             vertices.append(pf.geometry().asPoint())
 
         feature = QgsFeature()
-        feature.setGeometry(QgsGeometry.fromPolyline(vertices))
-        #print(vertices)
-        #print("---")
-        #print([QgsPoint(1, 1), QgsPoint(10, 10)])
-        #feature.setGeometry(QgsGeometry.fromPolyline([QgsPoint(1, 1), QgsPoint(10, 10)]))
+        feature.setGeometry(QgsGeometry.fromPolylineXY(vertices))
         lineLayer.addFeatures([feature])
 
     def deselectFeatures(self, layer):
-        layer.setSelectedFeatures([])
+        layer.select([])

@@ -1,5 +1,5 @@
 from xml.sax import handler
-from qgis.core import QgsFeature, QgsGeometry, QgsPoint
+from qgis.core import *
 
 class ZebFileHandler(handler.ContentHandler):
 
@@ -66,7 +66,7 @@ class ZebFileHandler(handler.ContentHandler):
 
     def insertFeature(self, x, y, z, lfdm, pictures):
         #init the new feature
-        feat = QgsFeature(self.pointLayer.pendingFields())
+        feat = QgsFeature(self.pointLayer.fields())
 
         #insert the attributes of the new feature
         feat.setAttribute("x", float(x))
@@ -76,7 +76,7 @@ class ZebFileHandler(handler.ContentHandler):
         feat.setAttribute("pictures", str(pictures))
 
         #create the geometry of the new feature
-        feat.setGeometry(QgsGeometry.fromPoint(QgsPoint(float(x), float(y))))
+        feat.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(float(x), float(y))))
 
         #add the feature to the layer
         self.pointLayer.addFeatures([feat])

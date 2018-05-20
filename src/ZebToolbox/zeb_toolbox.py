@@ -20,17 +20,18 @@
  *                                                                         *
  ***************************************************************************/
 """
-from PyQt4.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
-from PyQt4.QtGui import QAction, QIcon, QFileDialog
+from PyQt5.QtCore import QSettings, QTranslator, qVersion, QCoreApplication
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QAction, QFileDialog
 # Initialize Qt resources from file resources.py
-import resources
+from .resources import *
 # Import the code for the dialog
 from qgis.gui import QgsMessageBar
-from qgis.core import QgsMessageLog
+from qgis.core import *
 import sys, traceback
-from zeb_toolbox_dialog import ZebToolboxDialog
+from .zeb_toolbox_dialog import ZebToolboxDialog
 import os.path
-import src.importer.importcontroller as ic
+from .src.importer.importcontroller import ImportController
 
 
 class ZebToolbox:
@@ -195,17 +196,17 @@ class ZebToolbox:
         if result:
             try:
                 zebFilePath = self.dlg.lineEditSelectZebFile.text()
-                importController = ic.ImportController()
+                importController = ImportController()
                 importController.importZebFile(zebFilePath)
-                self.iface.messageBar().pushMessage("Info", "ZEB-file imported.", level=QgsMessageBar.INFO, duration=5)
+                self.iface.messageBar().pushMessage("Info", "ZEB-file imported.", level=Qgis.Success, duration=10)
             except:
                 e = sys.exc_info()[0]
-                self.iface.messageBar().pushMessage("Error", "Import of ZEB-file failed. Look into the python console for the stack trace.", level=QgsMessageBar.CRITICAL)
-                QgsMessageLog.logMessage(traceback.print_exc(), level=QgsMessageLog.CRITICAL)
+                self.iface.messageBar().pushMessage("Error", "Import of ZEB-file failed. Look into the python console for the stack trace.", level=Qgis.Critical)
+                QgsMessageLog.logMessage(traceback.print_exc(), level=Qgis.Critical)
 
 
     def selectZebFileFromFileDialog(self):
         s = QSettings()
-        filename = QFileDialog.getOpenFileName(self.dlg, "Select ZEB file ", s.value("qgis_zebtoolbox_input_file", ""), '*.xml')
+        filename, _filter = QFileDialog.getOpenFileName(self.dlg, "Select ZEB file ", s.value("qgis_zebtoolbox_input_file", ""), '*.xml')
         self.dlg.lineEditSelectZebFile.setText(filename)
         s.setValue("qgis_zebtoolbox_input_file", filename)

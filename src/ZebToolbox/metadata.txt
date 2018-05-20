@@ -8,21 +8,22 @@
 
 [general]
 name=ZEB Toolbox
-qgisMinimumVersion=2.0
+qgisMinimumVersion=3.0
 description=toolbox for data of road monitoring and assessment in Germany (ZEB)
-version=0.3.1
+version=1.0.0
 author=Christoph Jung
 email=jagodki.cj@gmail.com
 
 about=The data of road monitoring and assessment in Germany are stored in a specific XML-schema, which cannot be read by different GI-systems. This plugin enables QGIS to extract the spatial information from the XML-files called Georohdaten and Rasterrohdaten and display them as temporary layers (directly in memory). Just ZEB-files of the type "Rohdaten[...]Geo" can be displayed in QGIS.
 
 changelog=
-    0.3.1 remove unnecessary print-commands
-    0.3.0 store the last selected filename for the next file dialog, usage of message bar of QGIS
-    0.2.0 add new plugin icon
-    0.1.2 remove ZIP from plugin
-    0.1.1 remove error while installing plugin in QGIS
-    0.1.0 import of one single ZEB-file realised
+    1.0.0 - Update for QGIS3
+    0.3.1 - remove unnecessary print-commands
+    0.3.0 - store the last selected filename for the next file dialog, usage of message bar of QGIS
+    0.2.0 - add new plugin icon
+    0.1.2 - remove ZIP from plugin
+    0.1.1 - remove error while installing plugin in QGIS
+    0.1.0 - import of one single ZEB-file realised
 
 tracker=https://github.com/jagodki/zebtoolbox/issues
 repository=https://github.com/jagodki/zebtoolbox
