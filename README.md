@@ -5,6 +5,8 @@ A <a href="https://github.com/qgis/QGIS">QGIS</a>-plugin as a toolbox for data o
 The data of road monitoring and assessment in Germany are stored in a specific XML-schema, which cannot be read by different GI-systems. This plugin enables QGIS to extract the spatial information from the XML-files called <i>Georohdaten</i> and <i>Rasterrohdaten</i> and display them as temporary layers (directly in memory).
 
 ## Change log
+1.0.0 - Update for QGIS3
+0.3.1 - remove unnecessary print-commands
 0.3.0 store the last selected filename for the next file dialog, usage of message bar of QGIS<br>
 0.2.0 add new plugin icon<br>
 0.1.2 remove ZIP from plugin<br>
